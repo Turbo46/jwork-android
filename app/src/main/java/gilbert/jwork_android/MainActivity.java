@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                             Job newJob = new Job(
                                 job.getInt("id"),
                                 job.getString("name"),
-                                job.getInt("price"),
+                                job.getInt("fee"),
                                 job.getString("category"),
                                 newRecruiter
                         );
