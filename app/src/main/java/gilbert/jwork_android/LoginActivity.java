@@ -18,23 +18,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        EditText etEmail = findViewById(R.id.login_email);
-        EditText etPassword = findViewById(R.id.login_password);
-        Button btnLogin = findViewById(R.id.login_button);
-        TextView tvRegister = findViewById(R.id.login_register);
+        EditText fieldEmail = findViewById(R.id.login_email);
+        EditText fieldPassword = findViewById(R.id.login_password);
+        Button tombolLogin = findViewById(R.id.login_button);
+        TextView textRegister = findViewById(R.id.login_register);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        tombolLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-
+            public void onClick(View view){
+                String email = fieldEmail.getText().toString();
+                String password = fieldPassword.getText().toString();
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -42,9 +41,13 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject != null){
                                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         } catch (JSONException e) {
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
                         }
                     }
                 };
@@ -54,8 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 queue.add(loginRequest);
             }
         });
-
-        tvRegister.setOnClickListener(new View.OnClickListener() {
+        textRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
