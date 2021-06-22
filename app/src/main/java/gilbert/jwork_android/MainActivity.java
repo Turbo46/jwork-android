@@ -1,18 +1,21 @@
 package gilbert.jwork_android;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
-import android.app.AlertDialog;
-import android.view.View;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import android.content.Intent;
+import gilbert.jwork_android.R;
+import gilbert.jwork_android.constructor.Job;
+import gilbert.jwork_android.constructor.Location;
+import gilbert.jwork_android.constructor.Recruiter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         String jobName = job.getString("name");
                         String jobCategory = job.getString("category");
 
-                        Job newJob = new Job(jobId, jobName, jobFee, jobCategory, newRecruiter);
+                        Job newJob = new Job(jobId, jobName, newRecruiter, jobFee, jobCategory);
                         jobIdList.add(newJob);
 
                         for (Recruiter rec : listRecruiter) {
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         MenuRequest menuRequest = new MenuRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         queue.add(menuRequest);
-        Button btnAppliedJob = findViewById(R.id.btn_Apply);
+        Button btnAppliedJob = findViewById(R.id.btnAppliedJob);
         btnAppliedJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

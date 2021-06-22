@@ -1,7 +1,5 @@
 package gilbert.jwork_android;
 
-import androidx.annotation.Nullable;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
@@ -11,7 +9,7 @@ import java.util.Map;
 
 public class LoginRequest extends StringRequest {
 
-    private static String URL = "http://10.0.2.2:8080/jobseeker/login";
+    private static final String URL = "http://10.0.2.2:8080/jobseeker/login";
     private Map<String, String> params;
 
     public LoginRequest(String email, String password, Response.Listener<String> listener) {
@@ -22,7 +20,7 @@ public class LoginRequest extends StringRequest {
     }
 
     @Override
-    protected Map<String, String> getParams() throws AuthFailureError {
+    public Map<String, String> getParams() throws AuthFailureError {
         return params;
     }
 }

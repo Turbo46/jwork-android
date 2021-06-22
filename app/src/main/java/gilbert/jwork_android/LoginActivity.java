@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import gilbert.jwork_android.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,10 +25,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        EditText etEmail = findViewById(R.id.login_email);
-        EditText etPassword = findViewById(R.id.login_password);
-        Button btnLogin = findViewById(R.id.login_button);
-        TextView tvRegister = findViewById(R.id.login_register);
+        EditText etEmail = findViewById(R.id.et_loginEmail);
+        EditText etPassword = findViewById(R.id.et_loginPassword);
+        Button btnLogin = findViewById(R.id.btn_register);
+        TextView tvRegister = findViewById(R.id.tv_register);
 
         btnLogin.setOnClickListener(v -> {
             String email = etEmail.getText().toString();
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }

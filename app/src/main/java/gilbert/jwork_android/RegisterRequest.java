@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RegisterRequest extends StringRequest {
 
-    private static String URL = "http://10.0.2.2:8080/jobseeker/register";
+    private static final String URL = "http://10.0.2.2:8080/jobseeker/register";
     private Map<String, String> params;
 
     public RegisterRequest(String name, String email, String password, Response.Listener<String> listener) {
@@ -21,7 +21,7 @@ public class RegisterRequest extends StringRequest {
     }
 
     @Override
-    protected Map<String, String> getParams() throws AuthFailureError{
+    public Map<String, String> getParams() throws AuthFailureError {
         return params;
     }
 }

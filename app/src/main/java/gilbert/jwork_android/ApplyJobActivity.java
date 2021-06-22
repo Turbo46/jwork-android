@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import gilbert.jwork_android.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,15 +44,15 @@ public class ApplyJobActivity extends AppCompatActivity {
             jobFee = extras.getInt("job_fee");
         }
 
-        EditText etRefCode = findViewById(R.id.ref_code);
+        EditText etRefCode = findViewById(R.id.referral_code);
         TextView tvRefCode = findViewById(R.id.textCode);
         TextView tvJobName = findViewById(R.id.job_name);
         TextView tvJobCategory = findViewById(R.id.job_category);
         TextView tvJobFee = findViewById(R.id.job_fee);
-        TextView tvTotalFee = findViewById(R.id.tot_fee);
+        TextView tvTotalFee = findViewById(R.id.total_fee);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
-        Button btnCount = findViewById(R.id.btn_Hit);
-        Button btnApply = findViewById(R.id.btn_Apply);
+        Button btnCount = findViewById(R.id.btnCount);
+        Button btnApply = findViewById(R.id.btnApply);
 
         btnApply.setVisibility(View.INVISIBLE);
         tvRefCode.setVisibility(View.INVISIBLE);
@@ -67,7 +68,7 @@ public class ApplyJobActivity extends AppCompatActivity {
                 // checkedId is the RadioButton selected
                 RadioButton rb = findViewById(checkedId);
                 switch (checkedId) {
-                    case R.id.E_wallet:
+                    case R.id.ewallet:
                         tvRefCode.setVisibility(View.VISIBLE);
                         etRefCode.setVisibility(View.VISIBLE);
                         break;
@@ -85,7 +86,7 @@ public class ApplyJobActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int checkedId = radioGroup.getCheckedRadioButtonId();
                 switch (checkedId) {
-                    case R.id.E_wallet:
+                    case R.id.ewallet:
                         String refCode = etRefCode.getText().toString();
                         Response.Listener<String> bonusResponse = new Response.Listener<String>() {
                             @Override
@@ -163,7 +164,7 @@ public class ApplyJobActivity extends AppCompatActivity {
                     request = new ApplyJobRequest(String.valueOf(jobID), String.valueOf(jobseekerID), responseListener);
                     RequestQueue requestQueue = Volley.newRequestQueue(ApplyJobActivity.this);
                     requestQueue.add(request);
-                } else if (selectedRadioId == R.id.E_wallet) {
+                } else if (selectedRadioId == R.id.ewallet) {
                     String refCode = etRefCode.getText().toString();
                     request = new ApplyJobRequest(String.valueOf(jobID), String.valueOf(jobseekerID), refCode, responseListener);
                     RequestQueue requestQueue = Volley.newRequestQueue(ApplyJobActivity.this);

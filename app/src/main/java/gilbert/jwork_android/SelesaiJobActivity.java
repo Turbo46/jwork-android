@@ -1,4 +1,5 @@
 package gilbert.jwork_android;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import gilbert.jwork_android.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +40,7 @@ public class SelesaiJobActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selesai_job_activity);
+        setContentView(R.layout.activity_selesai_job);
 
         staticInvoiceId = findViewById(R.id.invoice_id);
         staticJobseeker = findViewById(R.id.static_jobseeker);
@@ -56,8 +58,8 @@ public class SelesaiJobActivity extends AppCompatActivity {
         tvRefCode = findViewById(R.id.refCode);
         tvJobFee = findViewById(R.id.jobFee);
         tvTotalFee = findViewById(R.id.totalFee);
-        btnCancel = findViewById(R.id.btn_Cancel);
-        btnFinish = findViewById(R.id.btn_Fin);
+        btnCancel = findViewById(R.id.btnCancel);
+        btnFinish = findViewById(R.id.btnFinish);
         viewAtas = findViewById(R.id.viewBatasAtas);
         viewBawah = findViewById(R.id.viewBatasBawah);
 

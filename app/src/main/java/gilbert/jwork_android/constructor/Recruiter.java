@@ -1,4 +1,5 @@
-package gilbert.jwork_android;
+package gilbert.jwork_android.constructor;
+
 public class Recruiter {
     private int id;
     private String name;
