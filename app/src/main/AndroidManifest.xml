@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Jworkandroid">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".SelesaiJobActivty"></activity>
+        <activity android:name=".ApplyJobActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

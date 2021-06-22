@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="apply_now" />
+    <string name="count" />
+    <string name="textview" />
+    <string name="total_fee" />
+    <string name="ref_code" />
+    <string name="referral_code" />
+    <string name="bank" />
+    <string name="e_wallet" />
+    <string name="payment_method" />
+    <string name="job_fee" />
+    <string name="job_category" />
+    <string name="job_name" />
+    <string name="apply_job" />
+</resources>

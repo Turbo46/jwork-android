@@ -3,14 +3,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.app.AlertDialog;
-
+import android.view.View;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import android.content.Intent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,94 +21,118 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.os.Bundle;
-
 public class MainActivity extends AppCompatActivity {
 
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
     private ArrayList<Recruiter> listRecruiter = new ArrayList<>();
     private ArrayList<Job> jobIdList = new ArrayList<>();
     private HashMap<Recruiter, ArrayList<Job>> childMapping = new HashMap<>();
 
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    private static int jobSeekerId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            jobSeekerId = extras.getInt("jobseekerid");
+        }
+
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
         refreshList();
+
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Intent intent = new Intent(MainActivity.this, ApplyJobActivity.class);
+                int jobId = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getId();
+                String jobName = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getName();
+                String jobCategory = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getCategory();
+                int jobFee = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getFee();
+
+                intent.putExtra("job_id", jobId);
+                intent.putExtra("job_name", jobName);
+                intent.putExtra("job_category", jobCategory);
+                intent.putExtra("job_fee", jobFee);
+                intent.putExtra("jobseekerId", jobSeekerId);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     protected void refreshList() {
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray jsonResponse = new JSONArray(response);
-                    for (int i=0; i<jsonResponse.length(); i++) {
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-
+        Response.Listener<String> responseListener = response -> {
+            try {
+                JSONArray jsonResponse = new JSONArray(response);
+                if (jsonResponse != null) {
+                    for (int i = 0; i < jsonResponse.length(); i++) {
                         JSONObject job = jsonResponse.getJSONObject(i);
                         JSONObject recruiter = job.getJSONObject("recruiter");
                         JSONObject location = recruiter.getJSONObject("location");
 
-                        Location newLocation = new Location(
-                                location.getString("province"),
-                                location.getString("description"),
-                                location.getString("city")
-                        );
+                        String province = location.getString("province");
+                        String city = location.getString("city");
+                        String description = location.getString("description");
 
-                        Recruiter newRecruiter = new Recruiter(
-                                recruiter.getInt("id"),
-                                recruiter.getString("name"),
-                                recruiter.getString("email"),
-                                recruiter.getString("phoneNumber"),
-                                newLocation
-                        );
+                        Location location1 = new Location(province, city, description);
 
-                            Job newJob = new Job(
-                                job.getInt("id"),
-                                job.getString("name"),
-                                job.getInt("fee"),
-                                job.getString("category"),
-                                newRecruiter
-                        );
+                        int recruiterId = recruiter.getInt("id");
+                        String recruiterName = recruiter.getString("name");
+                        String recruiterEmail = recruiter.getString("email");
+                        String recruiterPhoneNumber = recruiter.getString("phoneNumber");
 
-                        jobIdList.add(newJob);
-
-                        boolean tempStatus = true;
-                        for(Recruiter recruiterPtr : listRecruiter) {
-                            if(recruiterPtr.getId() == newRecruiter.getId()){
-                                tempStatus = false;
+                        Recruiter newRecruiter = new Recruiter(recruiterId, recruiterName, recruiterEmail, recruiterPhoneNumber, location1);
+                        if (listRecruiter.size() > 0) {
+                            boolean success = true;
+                            for (Recruiter rec : listRecruiter)
+                                if (rec.getId() == newRecruiter.getId())
+                                    success = false;
+                            if (success) {
+                                listRecruiter.add(newRecruiter);
                             }
-                        }
-                        if(tempStatus==true){
+                        } else {
                             listRecruiter.add(newRecruiter);
                         }
-                    }
 
-                    for(Recruiter recruiterPtr : listRecruiter){
-                        ArrayList<Job> tempJobList = new ArrayList<>();
-                        for(Job jobPtr : jobIdList){
-                            if(jobPtr.getRecruiter().getId() == recruiterPtr.getId()){
-                                tempJobList.add(jobPtr);
+                        int jobId = job.getInt("id");
+                        int jobFee = job.getInt("fee");
+                        String jobName = job.getString("name");
+                        String jobCategory = job.getString("category");
+
+                        Job newJob = new Job(jobId, jobName, jobFee, jobCategory, newRecruiter);
+                        jobIdList.add(newJob);
+
+                        for (Recruiter rec : listRecruiter) {
+                            ArrayList<Job> temp = new ArrayList<>();
+                            for (Job jobs : jobIdList) {
+                                if (jobs.getRecruiter().getName().equals(rec.getName()) || jobs.getRecruiter().getEmail().equals(rec.getEmail()) || jobs.getRecruiter().getPhoneNumber().equals(rec.getPhoneNumber())) {
+                                    temp.add(jobs);
+                                }
                             }
+                            childMapping.put(rec, temp);
                         }
-                        childMapping.put(recruiterPtr, tempJobList);
                     }
                     listAdapter = new MainListAdapter(MainActivity.this, listRecruiter, childMapping);
                     expListView.setAdapter(listAdapter);
                 }
-                catch (JSONException e) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Load Data Failed.").create().show();
-                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         };
-
         MenuRequest menuRequest = new MenuRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         queue.add(menuRequest);
+        Button btnAppliedJob = findViewById(R.id.btn_Apply);
+        btnAppliedJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SelesaiJobActivity.class);
+                intent.putExtra("jobseekerid", jobSeekerId);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -18,46 +18,43 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        EditText fieldEmail = findViewById(R.id.login_email);
-        EditText fieldPassword = findViewById(R.id.login_password);
-        Button tombolLogin = findViewById(R.id.login_button);
-        TextView textRegister = findViewById(R.id.login_register);
+        EditText etEmail = findViewById(R.id.login_email);
+        EditText etPassword = findViewById(R.id.login_password);
+        Button btnLogin = findViewById(R.id.login_button);
+        TextView tvRegister = findViewById(R.id.login_register);
 
-        tombolLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                String email = fieldEmail.getText().toString();
-                String password = fieldPassword.getText().toString();
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if(jsonObject != null){
-                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
+        btnLogin.setOnClickListener(v -> {
+            String email = etEmail.getText().toString();
+            String password = etPassword.getText().toString();
+
+            Response.Listener<String> responseListener = response -> {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject != null) {
+                        Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        loginIntent.putExtra("jobseekerid", jsonObject.getInt("id"));
+                        loginIntent.addFlags(loginIntent.FLAG_ACTIVITY_CLEAR_TOP);
+                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(loginIntent);
+                        finish();
                     }
-                };
+                } catch (JSONException e) {
+                    Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                }
+            };
 
-                LoginRequest loginRequest = new LoginRequest(email, password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                queue.add(loginRequest);
-            }
+            LoginRequest loginRequest = new LoginRequest(email, password, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+            queue.add(loginRequest);
         });
-        textRegister.setOnClickListener(new View.OnClickListener() {
+
+        tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);

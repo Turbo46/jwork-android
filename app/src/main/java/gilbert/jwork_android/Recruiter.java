@@ -1,6 +1,5 @@
 package gilbert.jwork_android;
 public class Recruiter {
-
     private int id;
     private String name;
     private String email;
@@ -15,55 +14,43 @@ public class Recruiter {
         this.location = location;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public String getEmail(){
-        return email;
-    }
-
-    public String getPhoneNumber(){
-        return phoneNumber;
-    }
-
-    public Location getLocation(){
-        return location;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public Location getLocation() {
+        return location;
     }
 
-    @Override
-    public String toString()
-    {
-        return "= Recruiter ===============================" +
-                "\nId     : " + id +
-                "\nName      : " + name +
-                "\nEmail          : " + email +
-                "\nPhone   : " + phoneNumber +
-                "\nLocation      : " + location +
-                "\n==========================================";
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
